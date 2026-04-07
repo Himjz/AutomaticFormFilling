@@ -210,7 +210,8 @@ class SubmitScheduler(QObject):
                                     f"所选时间已过，自动顺延至次日 {target_time.toString('HH:mm:ss')}")
 
         self.target_dt = target_dt
-        target_timestamp = target_dt.toSecsSinceEpoch()  # 转换为Unix时间戳
+        execute_dt = target_dt.addSecs(-1)
+        target_timestamp = execute_dt.toSecsSinceEpoch()  # 转换为Unix时间戳
 
         # 3. 启动独立进程等待执行（与UI完全解耦）
         self.task_process = multiprocessing.Process(

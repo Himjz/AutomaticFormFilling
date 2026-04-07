@@ -32,7 +32,7 @@ ASYNC_CONFIG = {
 
 # 浏览器配置
 BROWSER_CONFIG = {
-    "headless": False,
+    "headless": True,
     "args": [
         "--disable-gpu",
         "--no-sandbox",
