@@ -11,7 +11,7 @@ from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTimeEdit, QMessageBox
 
 from core import submit_forms
-from utils.config import ASYNC_CONFIG, FORM_CONFIG
+from utils.config import ASYNC_CONFIG, FORM_CONFIG, BROWSER_CONFIG
 
 
 # 全局获取运行中的事件循环
@@ -42,7 +42,7 @@ def task_worker(target_timestamp: float, preloaded_data: List[Dict], result_queu
                 submit_forms(
                     url=FORM_CONFIG["url"],
                     data_list=preloaded_data,
-                    headless=FORM_CONFIG.get("headless", False),
+                    headless=BROWSER_CONFIG.get("headless", False),
                     max_concurrent=ASYNC_CONFIG["max_concurrent"]
                 )
             )
@@ -52,7 +52,7 @@ def task_worker(target_timestamp: float, preloaded_data: List[Dict], result_queu
             result = submit_forms(
                 url=FORM_CONFIG["url"],
                 data_list=preloaded_data,
-                headless=FORM_CONFIG.get("headless", False),
+                headless=BROWSER_CONFIG.get("headless", False),
                 max_concurrent=ASYNC_CONFIG["max_concurrent"]
             )
         result_queue.put(("success", f"共处理 {len(preloaded_data)} 条数据"))
@@ -210,7 +210,7 @@ class SubmitScheduler(QObject):
                                     f"所选时间已过，自动顺延至次日 {target_time.toString('HH:mm:ss')}")
 
         self.target_dt = target_dt
-        execute_dt = target_dt.addSecs(-1)
+        execute_dt = target_dt.addSecs(-6)
         target_timestamp = execute_dt.toSecsSinceEpoch()  # 转换为Unix时间戳
 
         # 3. 启动独立进程等待执行（与UI完全解耦）
@@ -266,7 +266,7 @@ class SubmitScheduler(QObject):
                 lambda: submit_forms(
                     url=FORM_CONFIG["url"],
                     data_list=self.preloaded_data,
-                    headless=FORM_CONFIG.get("headless", False),
+                    headless=BROWSER_CONFIG.get("headless", False),
                     max_concurrent=ASYNC_CONFIG["max_concurrent"]
                 )
             )

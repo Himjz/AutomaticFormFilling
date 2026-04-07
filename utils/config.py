@@ -3,7 +3,7 @@ import os
 
 # 表单配置
 FORM_CONFIG = {
-    "url": "https://f.wps.cn/ksform/w/write/9ZhYHYlD",
+    "url": "https://f.wps.cn/g/oZEBiwxt/",
     "field_map": {
         "学号": "学号",
         "专业班级": "专业班级",
