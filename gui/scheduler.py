@@ -259,24 +259,16 @@ class SubmitScheduler(QObject):
     async def _do_submit(self):
         """兼容异步提交的兜底逻辑"""
         try:
-            if asyncio.iscoroutinefunction(submit_forms):
-                await submit_forms(
+            loop = get_running_loop()
+            await loop.run_in_executor(
+                None,
+                lambda: submit_forms(
                     url=FORM_CONFIG["url"],
                     data_list=self.preloaded_data,
                     headless=FORM_CONFIG.get("headless", False),
                     max_concurrent=ASYNC_CONFIG["max_concurrent"]
                 )
-            else:
-                loop = get_running_loop()
-                await loop.run_in_executor(
-                    None,
-                    lambda: submit_forms(
-                        url=FORM_CONFIG["url"],
-                        data_list=self.preloaded_data,
-                        headless=FORM_CONFIG.get("headless", False),
-                        max_concurrent=ASYNC_CONFIG["max_concurrent"]
-                    )
-                )
+            )
         except Exception as e:
             raise e
 
