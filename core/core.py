@@ -42,7 +42,7 @@ class FormCore:
     async def create_page(self, url: str) -> Page:
         """打开页面（无多余延时）"""
         page = await self.context.new_page()
-        await page.goto(url, wait_until="domcontentloaded", timeout=10000)
+        await page.goto(url, wait_until="domcontentloaded", timeout=10000)  # noqa
         print("🌍 页面已加载")
         return page
 
@@ -59,7 +59,7 @@ class FormCore:
                 question = page.locator(".ksapc-questions-write-container", has_text=self.FIELD_MAP[key])
                 await question.locator("textarea.ant-input").fill(value)
                 print(f"✅ {key} → {value}")
-            except:
+            except: # noqa
                 print(f"❌ {key} 填写失败")
 
         print("🎉 填写完成")

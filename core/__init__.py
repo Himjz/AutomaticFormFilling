@@ -34,12 +34,12 @@ def submit_forms(url: str, data_list: list[dict], headless: bool = True, max_con
 
     # 异步核心逻辑
     async def main():
-        core = FormCore(headless=headless)
+        main_core = FormCore(headless=headless)
         try:
-            await core.start()
-            await core.run_concurrent(url, data_list, max_tasks=max_concurrent)
+            await main_core.start()
+            await main_core.run_concurrent(url, data_list, max_tasks=max_concurrent)
         finally:
-            await core.close()
+            await main_core.close()
 
     # 执行异步任务
     asyncio.run(main())
